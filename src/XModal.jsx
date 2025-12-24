@@ -2,14 +2,12 @@ import React, { useState } from "react";
 
 const XModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     phone: "",
     dob: "",
   });
-
   const [errors, setErrors] = useState({});
 
   const openModal = () => {
@@ -25,8 +23,7 @@ const XModal = () => {
   };
 
   const handleOutsideClick = (e) => {
-    // Cypress last test needs this
-    if (e.target.className === "modal") {
+    if (e.target.classList.contains("modal")) {
       closeModal();
     }
   };
@@ -38,7 +35,6 @@ const XModal = () => {
 
   const validate = () => {
     const newErrors = {};
-
     if (!formData.username.trim())
       newErrors.username = "Please fill out the Username field.";
     if (!formData.email.trim())
@@ -80,7 +76,7 @@ const XModal = () => {
   };
 
   return (
-    <div id="root">
+    <div id="root" style={{ minHeight: "100vh" }}>
       {!isModalOpen && (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
           <h2>User Details Modal</h2>
@@ -96,8 +92,8 @@ const XModal = () => {
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            width: "100vw",
+            height: "100vh",
             backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",
