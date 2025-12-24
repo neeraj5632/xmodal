@@ -60,7 +60,7 @@ const XModal = () => {
     const dobDate = new Date(dob);
     const today = new Date();
     if (dobDate > today) {
-      alert("Invalid Date of Birth. Please enter a valid past date.");
+      alert("Invalid date of birth. Please enter a valid past date.");
       return false;
     }
 
@@ -72,7 +72,6 @@ const XModal = () => {
     if (validate()) closeModal();
   };
 
-  // Close modal when clicking outside modal-content
   const handleOutsideClick = (e) => {
     if (e.target.className === "modal") {
       closeModal();
@@ -81,6 +80,7 @@ const XModal = () => {
 
   return (
     <div
+      id="root"
       style={{ minHeight: "100vh", padding: "50px", boxSizing: "border-box" }}
     >
       {!isModalOpen && <button onClick={openModal}>Open Form</button>}
@@ -116,6 +116,7 @@ const XModal = () => {
             <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
               User Details
             </h2>
+
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: "10px" }}>
                 <label htmlFor="username">Username:</label>
