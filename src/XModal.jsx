@@ -27,7 +27,6 @@ const XModal = () => {
   const validate = () => {
     const { username, email, phone, dob } = formData;
 
-    // Empty field validation
     if (!username.trim()) {
       alert("Please fill out the Username field.");
       return false;
@@ -45,7 +44,6 @@ const XModal = () => {
       return false;
     }
 
-    // Format validation
     if (!email.includes("@")) {
       alert("Invalid email. Please check your email address.");
       return false;
@@ -58,8 +56,7 @@ const XModal = () => {
     }
 
     const dobDate = new Date(dob);
-    const today = new Date();
-    if (dobDate > today) {
+    if (dobDate > new Date()) {
       alert("Invalid date of birth. Please enter a valid past date.");
       return false;
     }
@@ -73,16 +70,11 @@ const XModal = () => {
   };
 
   const handleOutsideClick = (e) => {
-    if (e.target.className === "modal") {
-      closeModal();
-    }
+    if (e.target.className === "modal") closeModal();
   };
 
   return (
-    <div
-      id="root"
-      style={{ minHeight: "100vh", padding: "50px", boxSizing: "border-box" }}
-    >
+    <div id="root" style={{ minHeight: "100vh", padding: "50px" }}>
       {!isModalOpen && <button onClick={openModal}>Open Form</button>}
 
       {isModalOpen && (
@@ -116,7 +108,6 @@ const XModal = () => {
             <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
               User Details
             </h2>
-
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: "10px" }}>
                 <label htmlFor="username">Username:</label>
