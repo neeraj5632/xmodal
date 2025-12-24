@@ -115,8 +115,8 @@ const XModal = () => {
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            width: "100vw", // <-- yahan change karna hai
+            height: "100vh", // <-- yahan change karna hai
             backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",
