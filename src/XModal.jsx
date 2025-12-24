@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const XModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -9,14 +10,25 @@ const XModal = () => {
     dob: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const openModal = () => {
     setIsModalOpen(true);
+    setErrors({});
     setFormData({ username: "", email: "", phone: "", dob: "" });
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setErrors({});
     setFormData({ username: "", email: "", phone: "", dob: "" });
+  };
+
+  const handleOutsideClick = (e) => {
+    // Cypress last test needs this
+    if (e.target.className === "modal") {
+      closeModal();
+    }
   };
 
   const handleChange = (e) => {
@@ -24,60 +36,57 @@ const XModal = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validate = () => {
+    const newErrors = {};
 
-    const { username, email, phone, dob } = formData;
+    if (!formData.username.trim())
+      newErrors.username = "Please fill out the Username field.";
+    if (!formData.email.trim())
+      newErrors.email = "Please fill out the Email field.";
+    if (!formData.phone.trim())
+      newErrors.phone = "Please fill out the Phone field.";
+    if (!formData.dob.trim())
+      newErrors.dob = "Please fill out the Date of Birth field.";
 
-    // Required fields check
-    if (!username.trim()) {
-      alert("Please fill out the Username field.");
-      return;
-    }
-    if (!email.trim()) {
-      alert("Please fill out the Email field.");
-      return;
-    }
-    if (!phone.trim()) {
-      alert("Please fill out the Phone field.");
-      return;
-    }
-    if (!dob.trim()) {
-      alert("Please fill out the Date of Birth field.");
-      return;
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return false;
     }
 
-    // Email validation
-    if (!email.includes("@")) {
+    if (!formData.email.includes("@")) {
       alert("Invalid email. Please check your email address.");
-      return;
+      return false;
     }
 
-    // Phone validation
-    const phoneDigits = phone.replace(/\D/g, "");
+    const phoneDigits = formData.phone.replace(/\D/g, "");
     if (phoneDigits.length !== 10) {
       alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return;
+      return false;
     }
 
-    // DOB validation
-    const dobDate = new Date(dob);
-    if (dobDate > new Date()) {
+    const dobDate = new Date(formData.dob);
+    if (isNaN(dobDate.getTime()) || dobDate > new Date()) {
       alert("Invalid date of birth. Please enter a valid past date.");
-      return;
+      return false;
     }
 
-    // All validation passed
-    closeModal();
+    setErrors({});
+    return true;
   };
 
-  const handleOutsideClick = (e) => {
-    if (e.target.className === "modal") closeModal();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) closeModal();
   };
 
   return (
-    <div id="root" style={{ minHeight: "100vh", padding: "50px" }}>
-      {!isModalOpen && <button onClick={openModal}>Open Form</button>}
+    <div id="root">
+      {!isModalOpen && (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <h2>User Details Modal</h2>
+          <button onClick={openModal}>Open Form</button>
+        </div>
+      )}
 
       {isModalOpen && (
         <div
@@ -87,8 +96,8 @@ const XModal = () => {
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",
@@ -103,60 +112,114 @@ const XModal = () => {
               backgroundColor: "#fff",
               padding: "20px",
               borderRadius: "8px",
-              width: "350px",
+              width: "300px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             }}
           >
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              User Details
-            </h2>
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: "10px" }}>
+            <h3 style={{ textAlign: "center" }}>Fill Details</h3>
+            <form onSubmit={handleSubmit} noValidate>
+              {/* Username */}
+              <div style={{ marginBottom: "12px" }}>
                 <label htmlFor="username">Username:</label>
+                <br />
                 <input
                   id="username"
                   type="text"
                   value={formData.username}
                   onChange={handleChange}
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{ width: "100%", padding: "6px" }}
                 />
+                {errors.username && (
+                  <div
+                    style={{
+                      color: "orange",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.username}
+                  </div>
+                )}
               </div>
 
-              <div style={{ marginBottom: "10px" }}>
-                <label htmlFor="email">Email:</label>
+              {/* Email */}
+              <div style={{ marginBottom: "12px" }}>
+                <label htmlFor="email">Email Address:</label>
+                <br />
                 <input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{ width: "100%", padding: "6px" }}
                 />
+                {errors.email && (
+                  <div
+                    style={{
+                      color: "orange",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.email}
+                  </div>
+                )}
               </div>
 
-              <div style={{ marginBottom: "10px" }}>
-                <label htmlFor="phone">Phone:</label>
+              {/* Phone */}
+              <div style={{ marginBottom: "12px" }}>
+                <label htmlFor="phone">Phone Number:</label>
+                <br />
                 <input
                   id="phone"
                   type="text"
                   value={formData.phone}
                   onChange={handleChange}
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{ width: "100%", padding: "6px" }}
                 />
+                {errors.phone && (
+                  <div
+                    style={{
+                      color: "orange",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.phone}
+                  </div>
+                )}
               </div>
 
-              <div style={{ marginBottom: "20px" }}>
+              {/* DOB */}
+              <div style={{ marginBottom: "12px" }}>
                 <label htmlFor="dob">Date of Birth:</label>
+                <br />
                 <input
                   id="dob"
                   type="date"
                   value={formData.dob}
                   onChange={handleChange}
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{ width: "100%", padding: "6px" }}
                 />
+                {errors.dob && (
+                  <div
+                    style={{
+                      color: "orange",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.dob}
+                  </div>
+                )}
               </div>
 
               <div style={{ textAlign: "center" }}>
-                <button type="submit" className="submit-button">
+                <button
+                  type="submit"
+                  className="submit-button"
+                  style={{ padding: "8px 16px" }}
+                >
                   Submit
                 </button>
               </div>
