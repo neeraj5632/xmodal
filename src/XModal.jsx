@@ -24,49 +24,51 @@ const XModal = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const validate = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
     const { username, email, phone, dob } = formData;
 
+    // Required fields check
     if (!username.trim()) {
       alert("Please fill out the Username field.");
-      return false;
+      return;
     }
     if (!email.trim()) {
       alert("Please fill out the Email field.");
-      return false;
+      return;
     }
     if (!phone.trim()) {
       alert("Please fill out the Phone field.");
-      return false;
+      return;
     }
     if (!dob.trim()) {
       alert("Please fill out the Date of Birth field.");
-      return false;
+      return;
     }
 
+    // Email validation
     if (!email.includes("@")) {
       alert("Invalid email. Please check your email address.");
-      return false;
+      return;
     }
 
+    // Phone validation
     const phoneDigits = phone.replace(/\D/g, "");
     if (phoneDigits.length !== 10) {
       alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return false;
+      return;
     }
 
+    // DOB validation
     const dobDate = new Date(dob);
     if (dobDate > new Date()) {
       alert("Invalid date of birth. Please enter a valid past date.");
-      return false;
+      return;
     }
 
-    return true;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) closeModal();
+    // All validation passed
+    closeModal();
   };
 
   const handleOutsideClick = (e) => {
