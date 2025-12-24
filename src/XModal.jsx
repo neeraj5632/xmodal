@@ -27,6 +27,7 @@ const XModal = () => {
   const validate = () => {
     const { username, email, phone, dob } = formData;
 
+    // Empty field validation
     if (!username.trim()) {
       alert("Please fill out the Username field.");
       return false;
@@ -44,6 +45,7 @@ const XModal = () => {
       return false;
     }
 
+    // Format validation
     if (!email.includes("@")) {
       alert("Invalid email. Please check your email address.");
       return false;
@@ -70,7 +72,7 @@ const XModal = () => {
     if (validate()) closeModal();
   };
 
-  // Close modal when clicking outside the modal-content
+  // Close modal when clicking outside modal-content
   const handleOutsideClick = (e) => {
     if (e.target.className === "modal") {
       closeModal();
@@ -107,10 +109,13 @@ const XModal = () => {
               backgroundColor: "#fff",
               padding: "20px",
               borderRadius: "8px",
-              width: "300px",
+              width: "350px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             }}
           >
+            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+              User Details
+            </h2>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: "10px" }}>
                 <label htmlFor="username">Username:</label>
@@ -145,7 +150,7 @@ const XModal = () => {
                 />
               </div>
 
-              <div style={{ marginBottom: "10px" }}>
+              <div style={{ marginBottom: "20px" }}>
                 <label htmlFor="dob">Date of Birth:</label>
                 <input
                   id="dob"
